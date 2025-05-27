@@ -18,10 +18,10 @@ public class ExcelCourseLoader {
         Row row = sheet.getRow(i);
         if (row == null) continue;
 
-        String name = getCellAsString(row.getCell(4));      // ✅ 교과목명
-        String timeInfo = getCellAsString(row.getCell(7));  // ✅ 강의시간
-        String location = getCellAsString(row.getCell(8));  // ✅ 강의실
-        String professor = getCellAsString(row.getCell(12));// ✅ 담당교수
+        String name = getCellAsString(row.getCell(5));      // 교과목명
+        String timeInfo = getCellAsString(row.getCell(8));  // 강의시간
+        String location = getCellAsString(row.getCell(9));  // 강의실
+        String professor = getCellAsString(row.getCell(13));// 담당교수
 
 
         List<TimeSlot> timeSlots = parseTimeSlotString(timeInfo);
