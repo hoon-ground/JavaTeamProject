@@ -1,12 +1,11 @@
+// 패키지 및 임포트
 package gui;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.stream.Collectors;
 import javax.swing.table.DefaultTableModel;
 import model.Course;
@@ -14,53 +13,200 @@ import model.TimeSlot;
 import model.ExcelCourseLoader;
 import model.Timetable;
 
-
 public class TimetableGUIWithExcel {
-    private static final String[] DAYS = {"월", "화", "수", "목", "금"};
-    private static final int START_HOUR = 9;
-    private static final int END_HOUR = 18;
-    private static final Color[] COLOR_POOL = {
-        new Color(210, 240, 255), new Color(255, 230, 230), new Color(230, 255, 230),
-        new Color(255, 255, 210), new Color(235, 210, 255), new Color(210, 255, 250)
+    private static final String[] DAYS = {"", "월", "화", "수", "목", "금"};
+    private static final String[] TIMES = {
+        "", "오전 9시", "오전 10시", "오전 11시", "오후 12시", "오후 1시",
+        "오후 2시", "오후 3시", "오후 4시", "오후 5시", "오후 6시"
     };
 
+    private static final int ROWS = TIMES.length;
+    private static final int COLS = DAYS.length;
+
+    private static JComboBox<String> semesterComboBox;
+    private static String currentSemester = "2025년 1학기";
+    private static Map<String, Timetable> semesterTimetables = new HashMap<>();
     private static Timetable timetable;
-    private static JPanel timetablePanel;
+    private static JPanel gridPanel;
+
+    private static JLabel totalCreditLabel;
+    private static JLabel majorCreditLabel;
+    private static JLabel generalCreditLabel;
 
     public static void main(String[] args) {
         timetable = new Timetable(new ArrayList<>());
+        semesterTimetables.put(currentSemester, timetable);
         SwingUtilities.invokeLater(() -> createMainFrame());
     }
 
     private static void createMainFrame() {
-        JFrame frame = new JFrame("에브리타임 시간표 보기");
+        JFrame frame = new JFrame("에브리타임 스타일 시간표");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1200, 800);
+        frame.setSize(1100, 700);
+
+        gridPanel = new JPanel(new GridLayout(ROWS, COLS));
 
         JPanel mainPanel = new JPanel(new BorderLayout());
-        timetablePanel = new JPanel();
-        JScrollPane scrollPane = new JScrollPane(timetablePanel);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
+        mainPanel.add(gridPanel, BorderLayout.CENTER);
 
-        JButton searchButton = new JButton("수업 목록에서 검색 및 추가");
-        searchButton.setFont(new Font("맑은 고딕", Font.BOLD, 14));
-        searchButton.setBackground(Color.RED);
-        searchButton.setForeground(Color.WHITE);
-        searchButton.setFocusPainted(false);
-        searchButton.addActionListener(e -> showCourseTableWithSearch());
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        leftPanel.setPreferredSize(new Dimension(180, 700));
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        buttonPanel.add(searchButton);
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+        JLabel label = new JLabel("학기 선택:");
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        String[] semesters = {"2025년 1학기", "2025년 2학기", "2026년 1학기"};
+        semesterComboBox = new JComboBox<>(semesters);
+        semesterComboBox.setMaximumSize(new Dimension(160, 25));
+        semesterComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+        semesterComboBox.addActionListener(e -> {
+            currentSemester = (String) semesterComboBox.getSelectedItem();
+            timetable = semesterTimetables.computeIfAbsent(currentSemester, k -> new Timetable(new ArrayList<>()));
+            drawGrid();
+        });
+
+        totalCreditLabel = new JLabel("총 학점: 0학점");
+        majorCreditLabel = new JLabel("전공 학점: 0학점");
+        generalCreditLabel = new JLabel("교양 학점: 0학점");
+
+        totalCreditLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        majorCreditLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        generalCreditLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        leftPanel.add(Box.createVerticalStrut(20));
+        leftPanel.add(label);
+        leftPanel.add(Box.createVerticalStrut(5));
+        leftPanel.add(semesterComboBox);
+        leftPanel.add(Box.createVerticalStrut(30));
+        leftPanel.add(totalCreditLabel);
+        leftPanel.add(Box.createVerticalStrut(5));
+        leftPanel.add(majorCreditLabel);
+        leftPanel.add(Box.createVerticalStrut(5));
+        leftPanel.add(generalCreditLabel);
+        leftPanel.add(Box.createVerticalGlue());
+
+        mainPanel.add(leftPanel, BorderLayout.WEST);
+
+        JButton addButton = new JButton("수업 목록에서 검색 및 추가");
+        addButton.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+        addButton.setBackground(Color.RED);
+        addButton.setForeground(Color.WHITE);
+        addButton.setFocusPainted(false);
+        addButton.addActionListener(e -> showCourseSelectionDialog());
+
+        JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        bottom.add(addButton);
+        mainPanel.add(bottom, BorderLayout.SOUTH);
 
         frame.setContentPane(mainPanel);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
 
-        drawTimetable();
+        // ⚠️ drawGrid는 UI 구성 끝나고 나서 호출해야 함
+        drawGrid();
+
+        frame.setVisible(true);
     }
 
-    private static void showCourseTableWithSearch() {
+
+    private static void drawGrid() {
+        gridPanel.removeAll();
+
+        for (int r = 0; r < ROWS; r++) {
+            for (int c = 0; c < COLS; c++) {
+                JPanel cell = new JPanel(new BorderLayout());
+                cell.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+                cell.setBackground(Color.WHITE);
+
+                if (r == 0 && c > 0) {
+                    JLabel label = new JLabel(DAYS[c], SwingConstants.CENTER);
+                    label.setFont(new Font("맑은 고딕", Font.BOLD, 13));
+                    cell.add(label, BorderLayout.CENTER);
+                } else if (c == 0 && r > 0) {
+                    JLabel label = new JLabel(TIMES[r], SwingConstants.CENTER);
+                    label.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+                    cell.add(label, BorderLayout.CENTER);
+                } else if (r > 0 && c > 0) {
+                    String day = DAYS[c];
+                    int hour = 9 + (r - 1);
+
+                    for (Course course : timetable.getCourses()) {
+                        for (TimeSlot slot : course.getTimeSlots()) {
+                            if (slot.getDay().equals(day) && slot.getStartHour() == hour) {
+                                Color bgColor = new Color(240, 248, 255);
+
+                                JPanel classPanel = new JPanel(new BorderLayout());
+                                classPanel.setBackground(bgColor);
+                                classPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+                                JTextPane textPane = new JTextPane();
+                                textPane.setContentType("text/html");
+                                textPane.setText(
+                                    "<html><body style='margin:2px; font-family:맑은 고딕; font-size:11px;'>" +
+                                    "<b>" + course.getName() + "</b><br>" +
+                                    course.getProfessor() +
+                                    "</body></html>"
+                                );
+                                textPane.setEditable(false);
+                                textPane.setOpaque(false);
+                                textPane.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 0));
+
+                                JPanel textWrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+                                textWrapper.setOpaque(false);
+                                textWrapper.add(textPane);
+
+                                JButton deleteBtn = new JButton("X");
+                                deleteBtn.setMargin(new Insets(0, 0, 0, 0));
+                                deleteBtn.setFont(new Font("맑은 고딕", Font.BOLD, 10));
+                                deleteBtn.setForeground(Color.RED);
+                                deleteBtn.setBorder(BorderFactory.createEmptyBorder());
+                                deleteBtn.setContentAreaFilled(false);
+                                deleteBtn.setToolTipText("삭제");
+                                deleteBtn.addActionListener(e -> {
+                                    timetable.getCourses().remove(course);
+                                    drawGrid();
+                                });
+
+                                JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+                                topPanel.setOpaque(false);
+                                topPanel.add(deleteBtn);
+
+                                classPanel.add(topPanel, BorderLayout.NORTH);
+                                classPanel.add(textWrapper, BorderLayout.CENTER);
+
+                                cell.add(classPanel, BorderLayout.CENTER);
+                            }
+                        }
+                    }
+                }
+
+                gridPanel.add(cell);
+            }
+        }
+
+        gridPanel.revalidate();
+        gridPanel.repaint();
+        updateCreditLabels();
+    }
+
+    private static void updateCreditLabels() {
+        int total = 0, major = 0, general = 0;
+
+        for (Course c : timetable.getCourses()) {
+            int credit = c.getCredit();
+            total += credit;
+            if (c.getDivision().contains("전공")) {
+                major += credit;
+            } else if (c.getDivision().contains("교양")) {
+                general += credit;
+            }
+        }
+
+        totalCreditLabel.setText("총 학점: " + total + "학점");
+        majorCreditLabel.setText("전공 학점: " + major + "학점");
+        generalCreditLabel.setText("교양 학점: " + general + "학점");
+    }
+
+    private static void showCourseSelectionDialog() {
         List<Course> allCourses = new ArrayList<>();
         allCourses.addAll(ExcelCourseLoader.loadCourses("src/resources/교양.xlsx"));
         allCourses.addAll(ExcelCourseLoader.loadCourses("src/resources/전공.xlsx"));
@@ -70,159 +216,78 @@ public class TimetableGUIWithExcel {
         dialog.setLocationRelativeTo(null);
 
         JPanel panel = new JPanel(new BorderLayout());
+
         JTextField searchField = new JTextField();
+        searchField.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
         panel.add(searchField, BorderLayout.NORTH);
 
-        String[] columnNames = {"교과목명", "담당교수", "강의실", "시간정보"};
+        String[] columnNames = {"학년", "구분", "교과목번호", "교과목명", "담당교수", "강의시간", "강의실", "학점"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         JTable table = new JTable(model);
+        table.setRowHeight(24);
+        table.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
         JScrollPane scrollPane = new JScrollPane(table);
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        // 초기 전체 course 목록 테이블에 채우기
         for (Course c : allCourses) {
             String timeStr = c.getTimeSlots().stream().map(TimeSlot::toString).collect(Collectors.joining(", "));
-            model.addRow(new String[]{c.getName(), c.getProfessor(), c.getLocation(), timeStr});
+            model.addRow(new Object[]{
+                c.getYear() + "학년",
+                c.getDivision(),
+                c.getSubjectCode(),
+                c.getName(),
+                c.getProfessor(),
+                timeStr,
+                c.getLocation(),
+                c.getCredit()
+            });
         }
 
-        JButton addButton = new JButton("선택한 수업 추가");
-        addButton.addActionListener(e -> {
-            int row = table.getSelectedRow();
-            if (row >= 0) {
-                String selectedName = (String) table.getValueAt(row, 0);
-                String selectedProf = (String) table.getValueAt(row, 1);
+        searchField.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent e) {
+                String query = searchField.getText().trim();
+                model.setRowCount(0);
+
                 for (Course c : allCourses) {
-                    if (c.getName().equals(selectedName) && c.getProfessor().equals(selectedProf)) {
+                    if (c.getName().contains(query)) {
+                        String timeStr = c.getTimeSlots().stream().map(TimeSlot::toString).collect(Collectors.joining(", "));
+                        model.addRow(new Object[]{
+                            c.getYear() + "학년",
+                            c.getDivision(),
+                            c.getSubjectCode(),
+                            c.getName(),
+                            c.getProfessor(),
+                            timeStr,
+                            c.getLocation(),
+                            c.getCredit()
+                        });
+                    }
+                }
+            }
+        });
+
+        JButton addBtn = new JButton("선택한 수업 추가");
+        addBtn.addActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow >= 0) {
+                String name = (String) table.getValueAt(selectedRow, 3);
+                String professor = (String) table.getValueAt(selectedRow, 4);
+                for (Course c : allCourses) {
+                    if (c.getName().equals(name) && c.getProfessor().equals(professor)) {
                         if (timetable.addCourse(c)) {
-                            drawTimetable();
-                            JOptionPane.showMessageDialog(dialog, "수업이 추가되었습니다.", "성공", JOptionPane.INFORMATION_MESSAGE);
+                            drawGrid();
+                            dialog.dispose();
                         } else {
-                            JOptionPane.showMessageDialog(dialog, "시간이 겹쳐 추가할 수 없습니다.", "추가 실패", JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.showMessageDialog(dialog, "시간이 겹쳐 추가할 수 없습니다.", "중복 오류", JOptionPane.WARNING_MESSAGE);
                         }
                         break;
                     }
                 }
             }
         });
-        panel.add(addButton, BorderLayout.SOUTH);
 
-        searchField.addKeyListener(new KeyAdapter() {
-            public void keyReleased(KeyEvent e) {
-                String query = searchField.getText();
-                model.setRowCount(0);
-                for (Course c : allCourses) {
-                    if (c.getName().contains(query)) {
-                        String timeStr = c.getTimeSlots().stream().map(TimeSlot::toString).collect(Collectors.joining(", "));
-                        model.addRow(new String[]{c.getName(), c.getProfessor(), c.getLocation(), timeStr});
-                    }
-                }
-                if (query.isEmpty()) {
-                    for (Course c : allCourses) {
-                        String timeStr = c.getTimeSlots().stream().map(TimeSlot::toString).collect(Collectors.joining(", "));
-                        model.addRow(new String[]{c.getName(), c.getProfessor(), c.getLocation(), timeStr});
-                    }
-                }
-            }
-        });
-
+        panel.add(addBtn, BorderLayout.SOUTH);
         dialog.setContentPane(panel);
         dialog.setVisible(true);
-    }
-
-    // drawTimetable 및 getDayIndex 등은 기존과 동일하게 유지
-
-
-    private static void drawTimetable() {
-        timetablePanel.removeAll();
-        timetablePanel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-
-        for (int i = 0; i < DAYS.length; i++) {
-            JLabel label = new JLabel(DAYS[i], SwingConstants.CENTER);
-            label.setOpaque(true);
-            label.setBackground(Color.WHITE);
-            label.setFont(new Font("맑은 고딕", Font.BOLD, 14));
-            label.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
-            gbc.gridx = i + 1;
-            gbc.gridy = 0;
-            timetablePanel.add(label, gbc);
-        }
-
-        for (int i = START_HOUR; i <= END_HOUR; i++) {
-            JLabel label = new JLabel("오전 " + i + "시", SwingConstants.CENTER);
-            if (i >= 12) label.setText("오후 " + (i > 12 ? i - 12 : 12) + "시");
-            label.setOpaque(true);
-            label.setBackground(Color.WHITE);
-            label.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
-            label.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
-            gbc.gridx = 0;
-            gbc.gridy = i - START_HOUR + 1;
-            timetablePanel.add(label, gbc);
-        }
-
-        Map<String, Color> courseColorMap = new HashMap<>();
-        int colorIndex = 0;
-
-        for (Course course : new ArrayList<>(timetable.getCourses())) {
-            if (!courseColorMap.containsKey(course.getName())) {
-                courseColorMap.put(course.getName(), COLOR_POOL[colorIndex % COLOR_POOL.length]);
-                colorIndex++;
-            }
-            Color bgColor = courseColorMap.get(course.getName());
-
-            JPanel classPanel = new JPanel(new BorderLayout());
-            classPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-            classPanel.setBackground(bgColor);
-
-            JTextArea textArea = new JTextArea(course.getName() + "\n" + course.getProfessor() + "\n" + course.getLocation());
-            textArea.setEditable(false);
-            textArea.setOpaque(false);
-            textArea.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-
-            JButton deleteBtn = new JButton("X");
-            deleteBtn.setMargin(new Insets(0, 0, 0, 0));
-            deleteBtn.setFont(new Font("맑은 고딕", Font.BOLD, 10));
-            deleteBtn.setForeground(Color.RED);
-            deleteBtn.setBorder(BorderFactory.createEmptyBorder());
-            deleteBtn.setContentAreaFilled(false);
-            deleteBtn.setToolTipText("삭제");
-            deleteBtn.addActionListener(e -> {
-                timetable.getCourses().remove(course);
-                drawTimetable();
-            });
-
-            JPanel topPanel = new JPanel(new BorderLayout());
-            topPanel.setOpaque(false);
-            topPanel.add(deleteBtn, BorderLayout.EAST);
-
-            classPanel.add(topPanel, BorderLayout.NORTH);
-            classPanel.add(textArea, BorderLayout.CENTER);
-
-            for (TimeSlot slot : course.getTimeSlots()) {
-                int dayIndex = getDayIndex(slot.getDay());
-                if (dayIndex == -1) continue;
-
-                int start = slot.getStartHour();
-                int end = slot.getEndHour();
-
-                gbc.gridx = dayIndex + 1;
-                gbc.gridy = start - START_HOUR + 1;
-                gbc.gridheight = end - start;
-                timetablePanel.add(classPanel, gbc);
-                gbc.gridheight = 1;
-            }
-        }
-        timetablePanel.revalidate();
-        timetablePanel.repaint();
-    }
-
-    private static int getDayIndex(String day) {
-        for (int i = 0; i < DAYS.length; i++) {
-            if (DAYS[i].equals(day)) return i;
-        }
-        return -1;
     }
 }
