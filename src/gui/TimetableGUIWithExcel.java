@@ -14,6 +14,7 @@ import model.TimeSlot;
 import model.ExcelCourseLoader;
 import model.Timetable;
 
+
 public class TimetableGUIWithExcel {
     private static final String[] DAYS = {"월", "화", "수", "목", "금"};
     private static final int START_HOUR = 9;

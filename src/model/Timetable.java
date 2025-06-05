@@ -6,6 +6,10 @@ import java.util.List;
 public class Timetable {
 	private final List<Course> courses;
 
+	public Timetable() {
+		this.courses = new ArrayList<>();
+	}
+
 	public Timetable(List<Course> courseList) {
 		this.courses = new ArrayList<>();
 		for (Course course : courseList) {
