@@ -10,6 +10,14 @@ public class Timetable {
 		this.courses = new ArrayList<>();
 	}
 
+	public Timetable(List<Course> courseList) {
+		this.courses = new ArrayList<>();
+		for (Course course : courseList) {
+			this.addCourse(course);
+		}
+	}
+
+
 	public boolean addCourse(Course course) {
 		for (Course existing : courses) {
 			for (TimeSlot ts1 : existing.getTimeSlots()) {
