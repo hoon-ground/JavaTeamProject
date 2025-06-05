@@ -18,6 +18,9 @@ public class Student {
         calculateCredits(); // 학점 자동 계산
     }
 
+
+    //현재 수강한 과목들을 기준으로 학점 총합, 전공/고양 학점 계산
+    //추후 과목별 이수구분 Course 내부에 추가 필요 -> 이후 해당 코드도 수정
     private void calculateCredits() {
         totalCredits = 0;
         majorCredits = 0;
@@ -26,7 +29,8 @@ public class Student {
         for (Course course : completedCourses) {
             totalCredits += course.getCredit();
 
-            // 전공 여부는 실제로는 course 객체 내부에 boolean isMajor 등이 있어야 분기 가능
+            // 전공 여부 판별 방식은 임시 방식임
+            // Course 클래스에 isMajor 필드 필요
             if (isMajorCourse(course)) {
                 majorCredits += course.getCredit();
             } else {
@@ -35,13 +39,12 @@ public class Student {
         }
     }
 
+    //과목 객체에서 전공 과목 판별 로직 필요 (아래 코드는 임시로 만듦)
     private boolean isMajorCourse(Course course) {
-        // 실제 구현 시, 전공 과목 판별 로직 필요
-        // 임시로 courseId가 전공 코드로 시작한다고 가정
         return course.getCourseId().startsWith("CS") || course.getCourseId().startsWith("MAJ");
     }
 
-
+    //졸업 요건 충족 여부 판단
     public boolean isGraduationPossible(GraduationRequirement req) {
         boolean totalOk = totalCredits >= req.getRequiredTotalCredits();
         boolean majorOk = majorCredits >= req.getRequiredMajorCredits();
@@ -82,7 +85,7 @@ public class Student {
 	}
 
 
-    // Getter들만 간단히 추가
+    // Getter들
     public int getTotalCredits() { return totalCredits; }
     public int getMajorCredits() { return majorCredits; }
     public int getGeneralCredits() { return generalCredits; }
