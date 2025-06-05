@@ -6,9 +6,13 @@ import java.util.List;
 public class Timetable {
 	private final List<Course> courses;
 
-	public Timetable() {
+	public Timetable(List<Course> courseList) {
 		this.courses = new ArrayList<>();
+		for (Course course : courseList) {
+			this.addCourse(course);
+		}
 	}
+
 
 	public boolean addCourse(Course course) {
 		for (Course existing : courses) {
