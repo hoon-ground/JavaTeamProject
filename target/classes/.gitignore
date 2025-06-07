@@ -1,5 +1,4 @@
 /META-INF/
-/gui/
-/data/
-/model/
 /resources/
+/model/
+/gui/
