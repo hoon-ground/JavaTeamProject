@@ -101,7 +101,7 @@ public class TimetableGUIWithExcel {
 
         frame.setContentPane(mainPanel);
 
-        // ⚠️ drawGrid는 UI 구성 끝나고 나서 호출해야 함
+        //drawGrid는 UI 구성 끝나고 나서 호출해야 함
         drawGrid();
 
         frame.setVisible(true);

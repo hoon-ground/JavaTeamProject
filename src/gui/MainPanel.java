@@ -2,8 +2,11 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import util.JsonUtil;
+import model.Timetable;
 
 public class MainPanel extends JPanel {
+	private TimetablePanel timetablePanel;
 	
     public MainPanel(StudentAppGUI app) {
         setLayout(new BorderLayout());
@@ -14,10 +17,10 @@ public class MainPanel extends JPanel {
         topPanel.add(addCourseBtn);
         topPanel.add(selectSemesterBtn);
 
-        JPanel coursePanel = new JPanel(new GridLayout(2, 2, 10, 10));
-        coursePanel.add(createCourseButton("과목1"));
-        coursePanel.add(createCourseButton("과목2"));
-        coursePanel.add(createCourseButton("과목3"));
+        //JPanel coursePanel = new JPanel(new GridLayout(2, 2, 10, 10));
+        //coursePanel.add(createCourseButton("과목1"));
+        //coursePanel.add(createCourseButton("과목2"));
+        //coursePanel.add(createCourseButton("과목3"));
 
         JPanel bottomPanel = new JPanel(new GridLayout(3, 1, 5, 5));
         JButton creditBtn = new JButton("학점계산기");
@@ -35,8 +38,30 @@ public class MainPanel extends JPanel {
         bottomPanel.add(backBtn);
 
         add(topPanel, BorderLayout.NORTH);
-        add(coursePanel, BorderLayout.CENTER);
+        //add(coursePanel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
+        
+        timetablePanel = new TimetablePanel();
+        add(timetablePanel, BorderLayout.CENTER);
+        
+        //저장 버튼
+        JButton saveBtn = new JButton("시간표 저장");
+        saveBtn.addActionListener(e -> {
+            JsonUtil.saveTimetable(timetablePanel.getTimetable());
+        });
+
+        //불러오기 버튼
+        JButton loadBtn = new JButton("시간표 불러오기");
+        loadBtn.addActionListener(e -> {
+            Timetable loaded = JsonUtil.loadTimetable();
+            if (loaded != null) {
+                timetablePanel.setTimetable(loaded);
+                JOptionPane.showMessageDialog(this, "불러오기 성공!");
+            }
+        });
+
+        bottomPanel.add(saveBtn);
+        bottomPanel.add(loadBtn);
     }
     
     private JButton createCourseButton(String courseName) {

@@ -9,7 +9,7 @@ public class StudentAppGUI extends JFrame {
 
     public StudentAppGUI() {
         setTitle("KNU 학생관리앱");
-        setSize(450, 400);
+        setSize(1000, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
