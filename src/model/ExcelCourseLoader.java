@@ -64,7 +64,9 @@ public class ExcelCourseLoader {
 
     private static int parseYear(String yearStr) {
         try {
-            return Integer.parseInt(yearStr.replaceAll("[^0-9]", ""));
+            int year = Integer.parseInt(yearStr.replaceAll("[^0-9]", ""));
+            if (year >= 10) year = year / 10; // 보정: 10 → 1, 20 → 2 등
+            return year;
         } catch (Exception e) {
             return 0;
         }
