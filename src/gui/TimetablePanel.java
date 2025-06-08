@@ -75,6 +75,16 @@ public class TimetablePanel extends JPanel {
                         	        public void mouseClicked(MouseEvent e) {
                         	            showCourseDetailDialog(selectedCourse);
                         	        }
+
+                        	        @Override
+                        	        public void mouseEntered(MouseEvent e) {
+                        	            overlay.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                        	        }
+
+                        	        @Override
+                        	        public void mouseExited(MouseEvent e) {
+                        	            overlay.setCursor(Cursor.getDefaultCursor());
+                        	        }
                         	    });
 
                         	    cell.removeAll(); // 혹시 이전 UI가 있을 수도 있으니
