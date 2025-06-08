@@ -56,12 +56,32 @@ public class TimetablePanel extends JPanel {
                 } else {
                     for (Course course : timetable.getCourses()) {
                         for (TimeSlot slot : course.getTimeSlots()) {
-                            if (slot.getDay().equals(DAYS[c]) && slot.getStartHour() == 9 + (r - 1)) {
-                                JTextArea text = new JTextArea(course.getName() + "\n" + course.getProfessor());
-                                text.setEditable(false);
-                                text.setOpaque(false);
-                                cell.add(text, BorderLayout.CENTER);
-                            }
+                        	if (slot.getDay().equals(DAYS[c]) && slot.getStartHour() == 9 + (r - 1)) {
+                        	    // 셀 안쪽에 내용 구성
+                        	    JLabel label = new JLabel("<html><center>" +
+                        	        course.getName() + "<br/>" + course.getProfessor() +
+                        	        "</center></html>", SwingConstants.CENTER);
+                        	    label.setFont(new Font("맑은 고딕", Font.PLAIN, 11));
+                        	    label.setOpaque(false);
+
+                        	    // 셀 덮는 투명 레이어 패널
+                        	    JPanel overlay = new JPanel(new BorderLayout());
+                        	    overlay.setOpaque(false);
+                        	    overlay.add(label, BorderLayout.CENTER);
+
+                        	    Course selectedCourse = course; // 람다 접근용
+                        	    overlay.addMouseListener(new MouseAdapter() {
+                        	        @Override
+                        	        public void mouseClicked(MouseEvent e) {
+                        	            showCourseDetailDialog(selectedCourse);
+                        	        }
+                        	    });
+
+                        	    cell.removeAll(); // 혹시 이전 UI가 있을 수도 있으니
+                        	    cell.setLayout(new BorderLayout());
+                        	    cell.add(overlay, BorderLayout.CENTER);
+                        	}
+
                         }
                     }
                 }
@@ -145,6 +165,39 @@ public class TimetablePanel extends JPanel {
         dialog.setContentPane(panel);
         dialog.setVisible(true);
     }
+    
+    private void showCourseDetailDialog(Course course) {
+        JTextArea detailArea = new JTextArea("과목명: " + course.getName() +
+            "\n교수: " + course.getProfessor() +
+            "\n시간: " + course.getTimeSlots().toString() +
+            "\n장소: " + course.getLocation() +
+            "\n과목코드: " + course.getSubjectCode() +
+            "\n이수구분: " + course.getDivision() +
+            "\n학점: " + course.getCredit());
+        detailArea.setEditable(false);
+
+        JButton deleteButton = new JButton("삭제");
+        deleteButton.addActionListener(e -> {
+            timetable.getCourses().remove(course);
+            drawGrid();
+            JOptionPane.showMessageDialog(this, "과목이 삭제되었습니다.");
+            Window window = SwingUtilities.getWindowAncestor(deleteButton);
+            if (window != null) window.dispose();
+        });
+
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(new JScrollPane(detailArea), BorderLayout.CENTER);
+        panel.add(deleteButton, BorderLayout.SOUTH);
+
+        JDialog dialog = new JDialog();
+        dialog.setTitle("과목 상세정보");
+        dialog.setSize(300, 250);
+        dialog.setLocationRelativeTo(this);
+        dialog.setModal(true);
+        dialog.add(panel);
+        dialog.setVisible(true);
+    }
+
     
     // 시간표 객체 외부 노출
     public Timetable getTimetable() {
