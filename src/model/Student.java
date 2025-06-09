@@ -39,6 +39,10 @@ public class Student {
         }
     }
 
+    public void recalculate() {
+        calculateCredits();
+    }
+
     //과목 객체에서 전공 과목 판별 로직 필요 (아래 코드는 임시로 만듦)
     private boolean isMajorCourse(Course course) {
         return course.getCourseId().startsWith("CS") || course.getCourseId().startsWith("MAJ");
@@ -84,11 +88,11 @@ public class Student {
     	return result;
 	}
 
-
     // Getter들
     public int getTotalCredits() { return totalCredits; }
     public int getMajorCredits() { return majorCredits; }
     public int getGeneralCredits() { return generalCredits; }
     public int getEnglishScore() { return englishScore; }
     public List<Course> getCompletedCourses() { return completedCourses; }
+
 }

@@ -7,52 +7,61 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class GraduationUI extends JFrame {
-    private JLabel statusLabel;
+    private final Student student;
+    private final GraduationRequirement req;
     private JTextArea statusArea;
     private JLabel englishScoreLabel;
-    private int englishScore = 0;
-    private Student student;
+    private int englishScore;
 
-    public GraduationUI() {
-        setTitle("졸업 요건 확인 시스템");
+    public void refresh() {
+        updateStatus();
+    }
+
+    public GraduationUI(Student student, GraduationRequirement req) {
+        this.student = student;
+        this.req = req;
+        this.englishScore = student.getEnglishScore();
+        initUI();
+    }
+
+    private void initUI() {
+        setTitle("졸업 요건 확인");
         setSize(500, 400);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
         // 상단 상태 표시 영역
-        statusLabel = new JLabel("졸업 요건");
         statusArea = new JTextArea(6, 40);
         statusArea.setEditable(false);
+        add(new JScrollPane(statusArea), BorderLayout.CENTER);
 
-        // dummyCourses는 향후 실제 시간표 데이터와 연동되도록 수정 필요 (현재는 과목 없음)
-        ArrayList<model.Course> dummyCourses = new ArrayList<>(); 
-
-        // GraduationRequirement는 로그인 시 소속 학과에 따라 동적으로 불러오도록 수정 필요
-        GraduationRequirement req = new GraduationRequirement(140, 53, 24, 700);
-
-        // 로그인한 사용자 데이터 기반으로 생성되도록 수정 필요
-        student = new Student("컴퓨터공학과", dummyCourses, englishScore);
-        updateStatus(req);
-
-        // 공인 영어 점수 입력 ui
-        JPanel inputPanel = new JPanel();
-        englishScoreLabel = new JLabel("공인 영어 점수: 0점");
-
-        JButton inputButton = new JButton("입력");
+        // 영어 점수 입력 영역
+        JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        englishScoreLabel = new JLabel("공인 영어 점수: " + englishScore + "점");
+        JButton inputButton = new JButton("영어 점수 입력");
         inputButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
-                String input = JOptionPane.showInputDialog("공인 영어 점수를 입력하세요 (예: 750)");
+                String input = JOptionPane.showInputDialog(
+                        GraduationUI.this,
+                        "공인 영어 점수를 입력하세요 (예: 750)",
+                        englishScore
+                );
                 if (input != null && !input.isEmpty()) {
                     try {
-                        englishScore = Integer.parseInt(input);
+                        englishScore = Integer.parseInt(input.trim());
                         englishScoreLabel.setText("공인 영어 점수: " + englishScore + "점");
-                        student = new Student("컴퓨터공학과", dummyCourses, englishScore);
-                        updateStatus(req);
+                        updateStatus();
                     } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(null, "숫자를 입력해주세요.");
+                        JOptionPane.showMessageDialog(
+                                GraduationUI.this,
+                                "유효한 숫자를 입력해주세요.",
+                                "입력 오류",
+                                JOptionPane.ERROR_MESSAGE
+                        );
                     }
                 }
             }
@@ -60,21 +69,52 @@ public class GraduationUI extends JFrame {
 
         inputPanel.add(englishScoreLabel);
         inputPanel.add(inputButton);
-
-        add(statusLabel, BorderLayout.NORTH);
-        add(new JScrollPane(statusArea), BorderLayout.CENTER);
         add(inputPanel, BorderLayout.SOUTH);
+
+        // 초기 상태 업데이트
+        updateStatus();
 
         setVisible(true);
     }
 
-    private void updateStatus(GraduationRequirement req) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("졸업 가능 여부: ").append(student.isGraduationPossible(req) ? "✅ 가능" : "❌ 불가능").append("\n\n");
+    private void updateStatus() {
+        boolean totalOk = student.getTotalCredits() >= req.getRequiredTotalCredits();
+        boolean majorOk = student.getMajorCredits() >= req.getRequiredMajorCredits();
+        boolean generalOk = student.getGeneralCredits() >= req.getRequiredGeneralCredits();
+        boolean englishOk = englishScore >= req.getRequiredEnglishScore();
 
-        for (String status : student.getGraduationStatusDetails(req)) {
-            sb.append(status).append("\n");
-        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("졸업 가능 여부: ")
+                .append((totalOk && majorOk && generalOk && englishOk) ? "✅ 가능" : "❌ 불가능")
+                .append("\n\n");
+
+        sb.append(totalOk ? "✅ " : "❌ ")
+                .append("총 이수학점: ")
+                .append(student.getTotalCredits())
+                .append(" / ")
+                .append(req.getRequiredTotalCredits())
+                .append("\n");
+
+        sb.append(majorOk ? "✅ " : "❌ ")
+                .append("전공 이수학점: ")
+                .append(student.getMajorCredits())
+                .append(" / ")
+                .append(req.getRequiredMajorCredits())
+                .append("\n");
+
+        sb.append(generalOk ? "✅ " : "❌ ")
+                .append("교양 이수학점: ")
+                .append(student.getGeneralCredits())
+                .append(" / ")
+                .append(req.getRequiredGeneralCredits())
+                .append("\n");
+
+        sb.append(englishOk ? "✅ " : "❌ ")
+                .append("공인 영어 점수: ")
+                .append(englishScore)
+                .append(" / ")
+                .append(req.getRequiredEnglishScore())
+                .append("\n");
 
         statusArea.setText(sb.toString());
     }

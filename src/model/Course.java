@@ -56,6 +56,10 @@ public class Course {
         return credit;
     }
 
+    public String getCourseId() {
+        return subjectCode;
+    }
+
     @Override
     public String toString() {
         return name + " - " + professor;
