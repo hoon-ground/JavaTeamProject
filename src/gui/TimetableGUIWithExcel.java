@@ -8,10 +8,8 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.table.DefaultTableModel;
-import model.Course;
-import model.TimeSlot;
-import model.ExcelCourseLoader;
-import model.Timetable;
+
+import model.*;
 
 public class TimetableGUIWithExcel {
     private static final String[] DAYS = {"", "월", "화", "수", "목", "금"};
@@ -32,9 +30,13 @@ public class TimetableGUIWithExcel {
     private static JLabel totalCreditLabel;
     private static JLabel majorCreditLabel;
     private static JLabel generalCreditLabel;
+    private static GraduationUI gradUI;
 
     public static void main(String[] args) {
         timetable = new Timetable(new ArrayList<>());
+        Student student = new Student("컴퓨터공학과", timetable.getCourses(), 0);
+        timetable.setOwner(student);
+
         semesterTimetables.put(currentSemester, timetable);
         SwingUtilities.invokeLater(() -> createMainFrame());
     }
@@ -45,7 +47,6 @@ public class TimetableGUIWithExcel {
         frame.setSize(1100, 700);
 
         gridPanel = new JPanel(new GridLayout(ROWS, COLS));
-
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(gridPanel, BorderLayout.CENTER);
 
@@ -95,8 +96,25 @@ public class TimetableGUIWithExcel {
         addButton.setFocusPainted(false);
         addButton.addActionListener(e -> showCourseSelectionDialog());
 
+        JButton gradCheckButton = new JButton("졸업 요건 확인");
+        gradCheckButton.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+        gradCheckButton.setBackground(Color.DARK_GRAY);
+        gradCheckButton.setForeground(Color.WHITE);
+        gradCheckButton.setFocusPainted(false);
+
+        gradCheckButton.addActionListener(e -> {
+            Student s = timetable.getOwner();
+            GraduationRequirement req = new GraduationRequirement(140, 53, 24, s.getEnglishScore());
+            if (gradUI == null || !gradUI.isDisplayable()) {
+                gradUI = new GraduationUI(s, req);
+            } else {
+                gradUI.refresh();
+            }
+        });
+
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         bottom.add(addButton);
+        bottom.add(gradCheckButton);
         mainPanel.add(bottom, BorderLayout.SOUTH);
 
         frame.setContentPane(mainPanel);
@@ -162,9 +180,10 @@ public class TimetableGUIWithExcel {
                                 deleteBtn.setContentAreaFilled(false);
                                 deleteBtn.setToolTipText("삭제");
                                 deleteBtn.addActionListener(e -> {
-                                    timetable.getCourses().remove(course);
+                                    timetable.removeCourse(course);  // 수업 제거 + 학점 자동 갱신
                                     drawGrid();
                                 });
+
 
                                 JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
                                 topPanel.setOpaque(false);
@@ -185,26 +204,28 @@ public class TimetableGUIWithExcel {
 
         gridPanel.revalidate();
         gridPanel.repaint();
+
+        Student owner = timetable.getOwner();
+        if (owner != null) {
+            owner.recalculate();  // 학점 재계산
+        }
+
         updateCreditLabels();
+        if (gradUI != null && gradUI.isVisible()) {
+            gradUI.refresh();
+        }
     }
 
     private static void updateCreditLabels() {
-        int total = 0, major = 0, general = 0;
+        Student s = timetable.getOwner();
+        if (s == null) return;
 
-        for (Course c : timetable.getCourses()) {
-            int credit = c.getCredit();
-            total += credit;
-            if (c.getDivision().contains("전공")) {
-                major += credit;
-            } else if (c.getDivision().contains("교양")) {
-                general += credit;
-            }
-        }
-
-        totalCreditLabel.setText("총 학점: " + total + "학점");
-        majorCreditLabel.setText("전공 학점: " + major + "학점");
-        generalCreditLabel.setText("교양 학점: " + general + "학점");
+        // ↓ 이 부분을 기존 for‐loop 대신 이렇게 바꿔 주세요 ↓
+        totalCreditLabel.setText("총 학점: " + s.getTotalCredits() + "학점");
+        majorCreditLabel.setText("전공 학점: " + s.getMajorCredits() + "학점");
+        generalCreditLabel.setText("교양 학점: " + s.getGeneralCredits() + "학점");
     }
+
 
     private static void showCourseSelectionDialog() {
         List<Course> allCourses = new ArrayList<>();
@@ -290,4 +311,15 @@ public class TimetableGUIWithExcel {
         dialog.setContentPane(panel);
         dialog.setVisible(true);
     }
+
+    public TimetableGUIWithExcel() {
+        timetable = new Timetable(new ArrayList<>());
+
+        Student student = new Student("컴퓨터공학과", timetable.getCourses(), 0);
+        timetable.setOwner(student);
+
+        semesterTimetables.put(currentSemester, timetable);
+        createMainFrame();
+    }
+
 }

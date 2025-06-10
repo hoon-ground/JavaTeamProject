@@ -5,6 +5,11 @@ import java.util.List;
 
 public class Timetable {
 	private final List<Course> courses;
+	private Student owner;
+
+	public void setOwner(Student owner) {
+		this.owner = owner;
+	}
 
 	public Timetable() {
 		this.courses = new ArrayList<>();
@@ -16,7 +21,6 @@ public class Timetable {
 			this.addCourse(course);
 		}
 	}
-
 
 	public boolean addCourse(Course course) {
 		for (Course existing : courses) {
@@ -30,6 +34,9 @@ public class Timetable {
 			}
 		}
 		courses.add(course);
+		if (owner != null) {
+			owner.recalculate();
+		}
 		return true;
 	}
 
@@ -51,5 +58,17 @@ public class Timetable {
 			}
 		}
 		return sb.toString();
+	}
+
+	public boolean removeCourse(Course course) {
+		boolean removed = courses.remove(course);
+		if (removed && owner != null) {
+			owner.recalculate();
+		}
+		return removed;
+	}
+
+	public Student getOwner() {
+		return owner;
 	}
 }
