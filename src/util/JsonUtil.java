@@ -1,8 +1,12 @@
+// JsonUtil.java
 package util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.Timetable;
+import model.Course;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.*;
 
@@ -12,10 +16,32 @@ public class JsonUtil {
 
     public static void saveTimetable(Timetable timetable) {
         try {
+            // 기존 JSON 파일 읽기
+            JSONObject root = new JSONObject();
             File file = new File(FILE_PATH);
-            file.getParentFile().mkdirs(); // 폴더 없으면 생성
+            if (file.exists()) {
+                FileReader reader = new FileReader(file);
+                StringBuilder content = new StringBuilder();
+                int i;
+                while ((i = reader.read()) != -1) {
+                    content.append((char) i);
+                }
+                root = new JSONObject(content.toString());
+            }
+
+            // 과목 배열 업데이트
+            JSONArray courses = root.getJSONArray("courses");
+            for (Course course : timetable.getCourses()) {
+                JSONObject courseObj = new JSONObject();
+                courseObj.put("name", course.getName());
+                courseObj.put("professor", course.getProfessor());
+                // 다른 속성들도 추가
+                courses.put(courseObj);
+            }
+
+            // JSON 파일에 저장
             try (FileWriter writer = new FileWriter(file)) {
-                gson.toJson(timetable, writer);
+                gson.toJson(root.toString(2), writer);
                 System.out.println("✅ 시간표 저장 완료: " + FILE_PATH);
             }
         } catch (IOException e) {
