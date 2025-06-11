@@ -26,7 +26,7 @@ public class Course {
 
     public String getSubjectCode() {
         return subjectCode;
-    }
+    }   
 
     public String getName() {
         return name;
