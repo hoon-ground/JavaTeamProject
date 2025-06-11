@@ -220,7 +220,6 @@ public class TimetableGUIWithExcel {
         Student s = timetable.getOwner();
         if (s == null) return;
 
-        // ↓ 이 부분을 기존 for‐loop 대신 이렇게 바꿔 주세요 ↓
         totalCreditLabel.setText("총 학점: " + s.getTotalCredits() + "학점");
         majorCreditLabel.setText("전공 학점: " + s.getMajorCredits() + "학점");
         generalCreditLabel.setText("교양 학점: " + s.getGeneralCredits() + "학점");
