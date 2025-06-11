@@ -3,7 +3,10 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import util.JsonUtil;
+import java.util.List;
+import model.Course;
 import model.Timetable;
+import model.UserSession;
 
 public class MainPanel extends JPanel {
 	private TimetablePanel timetablePanel;
@@ -12,10 +15,22 @@ public class MainPanel extends JPanel {
         setLayout(new BorderLayout());
 
         JPanel topPanel = new JPanel();
-        JButton addCourseBtn = new JButton("과목 추가");
         JButton selectSemesterBtn = new JButton("학기 선택");
-        topPanel.add(addCourseBtn);
         topPanel.add(selectSemesterBtn);
+
+        //좌측 상단에 학기 표기
+        JLabel semesterLabel = new JLabel("선택된 학기: 2025년 1학기");
+        topPanel.setLayout(new BorderLayout());
+        topPanel.add(semesterLabel, BorderLayout.WEST);
+        topPanel.add(selectSemesterBtn, BorderLayout.EAST);
+
+        selectSemesterBtn.addActionListener(e -> {
+            String selected = showSemesterSelectionDialog();
+            if (selected != null && !selected.isEmpty()) {
+                semesterLabel.setText("선택된 학기: " + selected);
+            }
+            app.showPanel("semester");
+        });
 
         //JPanel coursePanel = new JPanel(new GridLayout(2, 2, 10, 10));
         //coursePanel.add(createCourseButton("과목1"));
@@ -27,7 +42,6 @@ public class MainPanel extends JPanel {
         JButton gradCheckBtn = new JButton("졸업요건 확인");
         JButton backBtn = new JButton("←");
         
-        addCourseBtn.addActionListener(e -> app.showPanel("add"));
         backBtn.addActionListener(e -> app.showPanel("user"));
         selectSemesterBtn.addActionListener(e -> app.showPanel("semester"));
         creditBtn.addActionListener(e -> app.showPanel("credit"));
@@ -47,18 +61,34 @@ public class MainPanel extends JPanel {
         //저장 버튼
         JButton saveBtn = new JButton("시간표 저장");
         saveBtn.addActionListener(e -> {
-            JsonUtil.saveTimetable(timetablePanel.getTimetable());
+            Timetable t = timetablePanel.getTimetable();
+                JsonUtil.saveUserTimetable(
+                UserSession.getStudentId(),
+                UserSession.getName(),
+                UserSession.getSelectedSemester(),
+                t.getCourses()
+            );
         });
 
         //불러오기 버튼
         JButton loadBtn = new JButton("시간표 불러오기");
         loadBtn.addActionListener(e -> {
-            Timetable loaded = JsonUtil.loadTimetable();
-            if (loaded != null) {
-                timetablePanel.setTimetable(loaded);
+            List<Course> courses = JsonUtil.loadUserTimetable(
+                UserSession.getStudentId(),
+                UserSession.getSelectedSemester()
+            );
+
+            if (!courses.isEmpty()) {
+                Timetable t = new Timetable();
+                t.setCourses(courses);
+                timetablePanel.setTimetable(t);
                 JOptionPane.showMessageDialog(this, "불러오기 성공!");
+            } else {
+                JOptionPane.showMessageDialog(this, "불러올 데이터가 없습니다.");
             }
         });
+
+
 
         bottomPanel.add(saveBtn);
         bottomPanel.add(loadBtn);
@@ -69,6 +99,19 @@ public class MainPanel extends JPanel {
         btn.addActionListener(e -> showCourseDetailDialog(courseName));
         return btn;
     }
+
+    private String showSemesterSelectionDialog() {
+        String[] options = { "2024년 1학기", "2024년 2학기", "2025년 1학기" };
+        return (String) JOptionPane.showInputDialog(
+                this,
+                "학기를 선택하세요:",
+                "학기 선택",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                options,
+                options[0]);
+    }
+
     
     private void showCourseDetailDialog(String courseName) {
     	
@@ -97,8 +140,4 @@ public class MainPanel extends JPanel {
         dialog.add(panel);
         dialog.setVisible(true);
     }
-
-    
-    
-    
 }
