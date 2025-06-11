@@ -32,24 +32,14 @@ public class MainPanel extends JPanel {
             app.showPanel("semester");
         });
 
-        //JPanel coursePanel = new JPanel(new GridLayout(2, 2, 10, 10));
-        //coursePanel.add(createCourseButton("과목1"));
-        //coursePanel.add(createCourseButton("과목2"));
-        //coursePanel.add(createCourseButton("과목3"));
-
-        JPanel bottomPanel = new JPanel(new GridLayout(3, 1, 5, 5));
+        JPanel bottomPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         JButton creditBtn = new JButton("학점계산기");
         JButton gradCheckBtn = new JButton("졸업요건 확인");
-        JButton backBtn = new JButton("←");
-        
-        backBtn.addActionListener(e -> app.showPanel("user"));
         selectSemesterBtn.addActionListener(e -> app.showPanel("semester"));
         creditBtn.addActionListener(e -> app.showPanel("credit"));
         gradCheckBtn.addActionListener(e -> app.showPanel("grad"));
         
-        bottomPanel.add(creditBtn);
-        bottomPanel.add(gradCheckBtn);
-        bottomPanel.add(backBtn);
+
 
         add(topPanel, BorderLayout.NORTH);
         //add(coursePanel, BorderLayout.CENTER);
@@ -89,9 +79,40 @@ public class MainPanel extends JPanel {
         });
 
 
-
-        bottomPanel.add(saveBtn);
         bottomPanel.add(loadBtn);
+        bottomPanel.add(saveBtn);
+        bottomPanel.add(creditBtn);
+        bottomPanel.add(gradCheckBtn);
+        
+        selectSemesterBtn.setFont(new Font("Poppins", Font.BOLD, 14));
+        selectSemesterBtn.setBackground(Color.WHITE);
+        selectSemesterBtn.setForeground(Color.BLACK);
+        semesterLabel.setFont(new Font("Poppins", Font.BOLD, 14));
+        semesterLabel.setForeground(Color.BLACK);
+        creditBtn.setFont(new Font("Poppins", Font.BOLD, 14));
+        creditBtn.setBackground(Color.WHITE);
+        creditBtn.setForeground(Color.BLACK);
+        gradCheckBtn.setFont(new Font("Poppins", Font.BOLD, 14));
+        gradCheckBtn.setBackground(Color.WHITE);
+        gradCheckBtn.setForeground(Color.BLACK);
+        setBackground(Color.WHITE); 
+        saveBtn.setFont(new Font("Poppins", Font.BOLD, 14));
+        saveBtn.setBackground(Color.WHITE);
+        saveBtn.setForeground(Color.BLACK);
+        loadBtn.setFont(new Font("Poppins", Font.BOLD, 14));
+        loadBtn.setBackground(Color.WHITE);
+        loadBtn.setForeground(Color.BLACK);
+
+        selectSemesterBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        creditBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        gradCheckBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        saveBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        loadBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        saveBtn.setPreferredSize(new Dimension(160, 30));
+        loadBtn.setPreferredSize(new Dimension(160, 30));
+        creditBtn.setPreferredSize(new Dimension(160, 30));
+        gradCheckBtn.setPreferredSize(new Dimension(160, 30));
+        
     }
     
     private JButton createCourseButton(String courseName) {
@@ -123,6 +144,10 @@ public class MainPanel extends JPanel {
         detailArea.setEditable(false);
 
         JButton deleteButton = new JButton("삭제");
+        deleteButton.setFont(new Font("Poppins", Font.BOLD, 14));
+        deleteButton.setBackground(Color.WHITE);
+        deleteButton.setForeground(Color.BLACK);
+        deleteButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         deleteButton.addActionListener(e -> {
             JOptionPane.showMessageDialog(this, courseName + " 과목이 삭제되었습니다.");
             //TODO : 일단 예시로 하드코딩해놨는데 나중에 데이터 받아오는 로직 구현하면 될 것 같습니다.

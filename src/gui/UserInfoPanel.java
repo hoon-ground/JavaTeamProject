@@ -30,20 +30,56 @@ public class UserInfoPanel extends JPanel {
     
     public UserInfoPanel(StudentAppGUI parent) {
         this.parent = parent;
-        setLayout(new GridLayout(3, 2));
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        
+        JLabel titleLabel = new JLabel("정보 입력");
+        titleLabel.setFont(new Font("Poppins", Font.BOLD, 20));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        gbc.gridwidth = 2;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        add(titleLabel, gbc);
 
         JLabel nameLabel = new JLabel("이름:");
         nameField = new JTextField();  // 이름 입력 받기
+        nameLabel.setFont(new Font("Poppins", Font.BOLD, 14));
+        nameField.setFont(new Font("Poppins", Font.PLAIN, 14));
+        nameField.setPreferredSize(new Dimension(200, 30));
+        nameField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        add(nameLabel, gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        add(nameField, gbc);
+
         JLabel studentIdLabel = new JLabel("학번:");
         studentIdField = new JTextField();  // 학번 입력 받기
-        saveButton = new JButton("저장");
-
-        add(nameLabel);
-        add(nameField);
-        add(studentIdLabel);
-        add(studentIdField);
-        add(new JLabel()); // 빈 칸
-        add(saveButton);
+        studentIdLabel.setFont(new Font("Poppins", Font.BOLD, 14));
+        studentIdField.setFont(new Font("Poppins", Font.PLAIN, 14));
+        studentIdField.setPreferredSize(new Dimension(200, 30));
+        studentIdField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        add(studentIdLabel, gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        add(studentIdField, gbc);
+        
+        saveButton = new JButton("로그인");
+        saveButton.setFont(new Font("Poppins", Font.BOLD, 14));
+        saveButton.setBackground(Color.WHITE);
+        saveButton.setForeground(Color.BLACK);
+        saveButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        saveButton.setPreferredSize(new Dimension(120, 40));
+        saveButton.setFocusPainted(false);
+        gbc.gridwidth = 2; // 버튼이 두 칸을 차지하도록 설정
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        add(saveButton, gbc);
 
         saveButton.addActionListener(new ActionListener() {
             @Override
@@ -51,6 +87,17 @@ public class UserInfoPanel extends JPanel {
                 saveOrLoadUserInfo();
             }
         });
+        
+        nameField.setFont(new Font("Poppins", Font.BOLD, 14));
+        studentIdField.setFont(new Font("Poppins", Font.BOLD, 14));
+        saveButton.setFont(new Font("Poppins", Font.BOLD, 14));
+        saveButton.setBackground(Color.WHITE);
+        saveButton.setForeground(Color.BLACK);
+        saveButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        saveButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        setBackground(Color.WHITE); 
+        setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); 
+        
     }
     private void saveOrLoadUserInfo() {
         String name = nameField.getText().trim();

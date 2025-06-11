@@ -38,6 +38,12 @@ public class TimetablePanel extends JPanel {
         this.add(topPanel, BorderLayout.NORTH);
         this.add(gridPanel, BorderLayout.CENTER);
         drawGrid();
+        
+        addCourseBtn.setFont(new Font("Poppins", Font.BOLD, 14));
+        addCourseBtn.setBackground(Color.WHITE);
+        addCourseBtn.setForeground(Color.BLACK);
+        addCourseBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        addCourseBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
     }
 
     private void drawGrid() {

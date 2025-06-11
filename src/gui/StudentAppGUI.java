@@ -20,7 +20,7 @@ public class StudentAppGUI extends JFrame {
     private String currentSemester = "2025년 1학기";
     
     public StudentAppGUI() {
-        setTitle("KNU 학생관리앱");
+        setTitle("KNU 시간표");
         setSize(1000, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -31,6 +31,8 @@ public class StudentAppGUI extends JFrame {
         mainPanel.add(new StartPanel(this), "start");
         mainPanel.add(new UserInfoPanel(this), "user");
         mainPanel.add(new MainPanel(this), "main");
+        mainPanel.add(new CreditCalculatorPanel(this), "credit");
+        mainPanel.add(new GraduationRequirementPanel(this), "grad");
 
         add(mainPanel);
         cardLayout.show(mainPanel, "start");  // 앱 실행 시 StartPanel이 먼저 나오도록 설정
