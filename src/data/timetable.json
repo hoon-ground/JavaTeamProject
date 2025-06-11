@@ -3,110 +3,350 @@
     "studentId": "2020114744",
     "timetables": {"2025년 1학기": [
       {
-        "division": "교양",
-        "professor": "황지윤",
-        "year": 0,
-        "name": "국어와 매체언어",
-        "location": "산격동 캠퍼스  KNU글로벌프라자304",
+        "division": "일반선택",
+        "professor": "고석주",
+        "year": 1,
+        "name": "컴퓨터학개론",
+        "location": "산격동 캠퍼스  IT대학5호관(IT융복합관)B102",
         "timeSlots": [
           {
             "endHour": 9,
             "startHour": 9,
-            "day": "화",
+            "day": "월",
             "startMinute": 0,
             "endMinute": 30
           },
           {
             "endHour": 10,
             "startHour": 9,
-            "day": "화",
+            "day": "월",
             "startMinute": 30,
             "endMinute": 0
           },
           {
             "endHour": 10,
             "startHour": 10,
-            "day": "화",
+            "day": "월",
             "startMinute": 0,
             "endMinute": 30
           },
           {
             "endHour": 11,
             "startHour": 10,
-            "day": "목",
+            "day": "수",
             "startMinute": 30,
             "endMinute": 0
           },
           {
             "endHour": 11,
             "startHour": 11,
-            "day": "목",
+            "day": "수",
             "startMinute": 0,
             "endMinute": 30
           },
           {
             "endHour": 12,
             "startHour": 11,
-            "day": "목",
+            "day": "수",
             "startMinute": 30,
             "endMinute": 0
           }
         ],
         "credit": 3,
-        "subjectCode": "CLTR0001-001"
+        "subjectCode": "ITEC0201-011"
+      },
+      {
+        "division": "공학전공",
+        "professor": "이은주",
+        "year": 2,
+        "name": "자료구조",
+        "location": "산격동 캠퍼스  IT대학5호관(IT융복합관)225",
+        "timeSlots": [
+          {
+            "endHour": 14,
+            "startHour": 13,
+            "day": "월",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 14,
+            "startHour": 14,
+            "day": "월",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 15,
+            "startHour": 14,
+            "day": "월",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 14,
+            "startHour": 13,
+            "day": "수",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 14,
+            "startHour": 14,
+            "day": "수",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 15,
+            "startHour": 14,
+            "day": "수",
+            "startMinute": 30,
+            "endMinute": 0
+          }
+        ],
+        "credit": 3,
+        "subjectCode": "COME0331-004"
+      },
+      {
+        "division": "공학전공",
+        "professor": "이은주",
+        "year": 2,
+        "name": "자료구조응용",
+        "location": "산격동 캠퍼스  IT대학5호관(IT융복합관)225",
+        "timeSlots": [
+          {
+            "endHour": 15,
+            "startHour": 15,
+            "day": "월",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 16,
+            "startHour": 15,
+            "day": "월",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 16,
+            "startHour": 16,
+            "day": "월",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 17,
+            "startHour": 16,
+            "day": "월",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 15,
+            "startHour": 15,
+            "day": "수",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 16,
+            "startHour": 15,
+            "day": "수",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 16,
+            "startHour": 16,
+            "day": "수",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 17,
+            "startHour": 16,
+            "day": "수",
+            "startMinute": 30,
+            "endMinute": 0
+          }
+        ],
+        "credit": 3,
+        "subjectCode": "COMP0216-003"
       },
       {
         "division": "교양",
-        "professor": "유신지",
-        "year": 1,
-        "name": "대학글쓰기",
-        "location": "산격동 캠퍼스  인문한국진흥관107",
+        "professor": "한윤수",
+        "year": 0,
+        "name": "캠핑",
+        "location": "산격동 캠퍼스  제2체육관B101",
+        "timeSlots": [
+          {
+            "endHour": 13,
+            "startHour": 13,
+            "day": "화",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 14,
+            "startHour": 13,
+            "day": "화",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 14,
+            "startHour": 14,
+            "day": "화",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 15,
+            "startHour": 14,
+            "day": "화",
+            "startMinute": 30,
+            "endMinute": 0
+          }
+        ],
+        "credit": 1,
+        "subjectCode": "CLTR0183-001"
+      },
+      {
+        "division": "일반선택",
+        "professor": "이일용",
+        "year": 0,
+        "name": "3D콘텐츠산업과 창업",
+        "location": "산격동 캠퍼스  정보전산원(전자계산소)117-1",
         "timeSlots": [
           {
             "endHour": 9,
             "startHour": 9,
-            "day": "수",
+            "day": "화",
             "startMinute": 0,
             "endMinute": 30
           },
           {
             "endHour": 10,
             "startHour": 9,
-            "day": "수",
+            "day": "화",
             "startMinute": 30,
             "endMinute": 0
           },
           {
             "endHour": 10,
             "startHour": 10,
-            "day": "수",
+            "day": "화",
             "startMinute": 0,
             "endMinute": 30
           },
           {
             "endHour": 11,
             "startHour": 10,
-            "day": "금",
+            "day": "화",
             "startMinute": 30,
             "endMinute": 0
           },
           {
             "endHour": 11,
             "startHour": 11,
-            "day": "금",
+            "day": "화",
             "startMinute": 0,
             "endMinute": 30
           },
           {
             "endHour": 12,
             "startHour": 11,
-            "day": "금",
+            "day": "화",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 12,
+            "startHour": 12,
+            "day": "화",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 13,
+            "startHour": 12,
+            "day": "화",
             "startMinute": 30,
             "endMinute": 0
           }
         ],
         "credit": 3,
-        "subjectCode": "CLTR0205-001"
+        "subjectCode": "FUTR0222-001"
+      },
+      {
+        "division": "공학전공",
+        "professor": "이시형",
+        "year": 2,
+        "name": "자바프로그래밍",
+        "location": "산격동 캠퍼스  IT대학5호관(IT융복합관)224",
+        "timeSlots": [
+          {
+            "endHour": 14,
+            "startHour": 14,
+            "day": "목",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 15,
+            "startHour": 14,
+            "day": "목",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 15,
+            "startHour": 15,
+            "day": "목",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 16,
+            "startHour": 15,
+            "day": "목",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 16,
+            "startHour": 16,
+            "day": "목",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 17,
+            "startHour": 16,
+            "day": "목",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 17,
+            "startHour": 17,
+            "day": "목",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 18,
+            "startHour": 17,
+            "day": "목",
+            "startMinute": 30,
+            "endMinute": 0
+          }
+        ],
+        "credit": 3,
+        "subjectCode": "COMP0217-001"
       }
     ]},
     "name": "김지훈",
@@ -116,6 +356,24 @@
     "studentId": "",
     "timetables": {},
     "name": "",
+    "selectedSemester": "2025년 1학기"
+  },
+  {
+    "studentId": "1",
+    "timetables": {},
+    "name": "1",
+    "selectedSemester": "2025년 1학기"
+  },
+  {
+    "studentId": "123",
+    "timetables": {},
+    "name": "123",
+    "selectedSemester": "2025년 1학기"
+  },
+  {
+    "studentId": "1",
+    "timetables": {},
+    "name": "11",
     "selectedSemester": "2025년 1학기"
   }
 ]}
