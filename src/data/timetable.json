@@ -428,5 +428,132 @@
     "timetables": {},
     "name": "11",
     "selectedSemester": "2025년 1학기"
+  },
+  {
+    "studentId": "2024004060",
+    "timetables": {"2025년 1학기": [
+      {
+        "division": "공학전공",
+        "professor": "이은주",
+        "year": 2,
+        "name": "자료구조",
+        "location": "산격동 캠퍼스  IT대학5호관(IT융복합관)225",
+        "timeSlots": [
+          {
+            "endHour": 14,
+            "startHour": 13,
+            "day": "월",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 14,
+            "startHour": 14,
+            "day": "월",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 15,
+            "startHour": 14,
+            "day": "월",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 14,
+            "startHour": 13,
+            "day": "수",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 14,
+            "startHour": 14,
+            "day": "수",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 15,
+            "startHour": 14,
+            "day": "수",
+            "startMinute": 30,
+            "endMinute": 0
+          }
+        ],
+        "credit": 3,
+        "subjectCode": "COME0331-004"
+      },
+      {
+        "division": "공학전공",
+        "professor": "이은주",
+        "year": 2,
+        "name": "자료구조응용",
+        "location": "산격동 캠퍼스  IT대학5호관(IT융복합관)225",
+        "timeSlots": [
+          {
+            "endHour": 15,
+            "startHour": 15,
+            "day": "월",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 16,
+            "startHour": 15,
+            "day": "월",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 16,
+            "startHour": 16,
+            "day": "월",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 17,
+            "startHour": 16,
+            "day": "월",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 15,
+            "startHour": 15,
+            "day": "수",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 16,
+            "startHour": 15,
+            "day": "수",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 16,
+            "startHour": 16,
+            "day": "수",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 17,
+            "startHour": 16,
+            "day": "수",
+            "startMinute": 30,
+            "endMinute": 0
+          }
+        ],
+        "credit": 3,
+        "subjectCode": "COMP0216-003"
+      }
+    ]},
+    "name": "황상균",
+    "selectedSemester": "2025년 1학기"
   }
 ]}
