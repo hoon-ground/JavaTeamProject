@@ -347,6 +347,59 @@
         ],
         "credit": 3,
         "subjectCode": "COMP0217-001"
+      },
+      {
+        "division": "교양",
+        "professor": "김동현",
+        "year": 0,
+        "name": "한국의문학과영화",
+        "location": "산격동 캠퍼스  우당교육관101",
+        "timeSlots": [
+          {
+            "endHour": 9,
+            "startHour": 9,
+            "day": "수",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 10,
+            "startHour": 9,
+            "day": "수",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 10,
+            "startHour": 10,
+            "day": "수",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 11,
+            "startHour": 10,
+            "day": "금",
+            "startMinute": 30,
+            "endMinute": 0
+          },
+          {
+            "endHour": 11,
+            "startHour": 11,
+            "day": "금",
+            "startMinute": 0,
+            "endMinute": 30
+          },
+          {
+            "endHour": 12,
+            "startHour": 11,
+            "day": "금",
+            "startMinute": 30,
+            "endMinute": 0
+          }
+        ],
+        "credit": 3,
+        "subjectCode": "CLTR0053-001"
       }
     ]},
     "name": "김지훈",
