@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Timetable {
-	private final List<Course> courses;
+	private List<Course> courses;
 	private Student owner;
 
 	public void setOwner(Student owner) {
@@ -39,6 +39,11 @@ public class Timetable {
 		}
 		return true;
 	}
+	
+	public void setCourses(List<Course> courses) {
+		this.courses = courses;
+	}
+
 
 	public List<Course> getCourses() {
 		return courses;
