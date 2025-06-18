@@ -12,7 +12,7 @@ public class ExcelCourseLoader {
         try (Workbook workbook = WorkbookFactory.create(new FileInputStream(filePath))) {
             Sheet sheet = workbook.getSheetAt(0);
 
-            for (int i = 2; i <= sheet.getLastRowNum(); i++) { // ✅ 2부터 시작 (실제 데이터 행)
+            for (int i = 2; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
                 if (row == null) continue;
 
@@ -26,7 +26,6 @@ public class ExcelCourseLoader {
                 int year = parseYear(yearStr);
                 int credit = (int) getCellNumber(row, 2);
 
-                // 필수 데이터 빠지면 건너뜀
                 if (subjectCode.isEmpty() || name.isEmpty()) continue;
 
                 List<TimeSlot> timeSlots = TimeSlot.parseTimeString(timeString);
@@ -65,7 +64,7 @@ public class ExcelCourseLoader {
     private static int parseYear(String yearStr) {
         try {
             int year = Integer.parseInt(yearStr.replaceAll("[^0-9]", ""));
-            if (year >= 10) year = year / 10; // 보정: 10 → 1, 20 → 2 등
+            if (year >= 10) year = year / 10;
             return year;
         } catch (Exception e) {
             return 0;

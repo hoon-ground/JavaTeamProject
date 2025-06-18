@@ -18,7 +18,6 @@ public class MainPanel extends JPanel {
         JButton selectSemesterBtn = new JButton("학기 선택");
         topPanel.add(selectSemesterBtn);
 
-        //좌측 상단에 학기 표기
         JLabel semesterLabel = new JLabel("선택된 학기: 2025년 1학기");
         topPanel.setLayout(new BorderLayout());
         topPanel.add(semesterLabel, BorderLayout.WEST);
@@ -40,15 +39,12 @@ public class MainPanel extends JPanel {
         gradCheckBtn.addActionListener(e -> app.showPanel("grad"));
         
 
-
         add(topPanel, BorderLayout.NORTH);
-        //add(coursePanel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
         
         timetablePanel = new TimetablePanel();
         add(timetablePanel, BorderLayout.CENTER);
         
-        //저장 버튼
         JButton saveBtn = new JButton("시간표 저장");
         saveBtn.addActionListener(e -> {
             Timetable t = timetablePanel.getTimetable();
@@ -60,7 +56,6 @@ public class MainPanel extends JPanel {
             );
         });
 
-        //불러오기 버튼
         JButton loadBtn = new JButton("시간표 불러오기");
         loadBtn.addActionListener(e -> {
             List<Course> courses = JsonUtil.loadUserTimetable(
@@ -135,7 +130,7 @@ public class MainPanel extends JPanel {
 
     
     private void showCourseDetailDialog(String courseName) {
-    	
+    	//초기화. 이후 값을 받아오면 값 변경.
         JTextArea detailArea = new JTextArea("과목명: " + courseName +
                 "\n- 교수: 김지훈" +
                 "\n- 과목코드: KNU123" +
@@ -150,8 +145,6 @@ public class MainPanel extends JPanel {
         deleteButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         deleteButton.addActionListener(e -> {
             JOptionPane.showMessageDialog(this, courseName + " 과목이 삭제되었습니다.");
-            //TODO : 일단 예시로 하드코딩해놨는데 나중에 데이터 받아오는 로직 구현하면 될 것 같습니다.
-            //TODO : 시간표/수강 목록에서 실제 삭제 로직 구현
         });
 
         JPanel panel = new JPanel(new BorderLayout());

@@ -15,22 +15,18 @@ public class GraduationRequirementPanel extends JPanel {
     }
 
     private void renderFirstVisit(StudentAppGUI app) {
-        // Create a new JPanel with GridBagLayout
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.WHITE);
 
-        // Create GridBagConstraints to control component placement
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5); // Add padding between components
+        gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Create title
         JLabel titleLabel = new JLabel("졸업요건 확인 입력");
         titleLabel.setFont(new Font("Poppins", Font.BOLD, 18));
         titleLabel.setForeground(Color.BLACK);
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // Create labels and text fields
         JLabel totalCreditsLabel = new JLabel("   총 이수학점:");
         JTextField totalCreditsField = new JTextField(20);
         JLabel majorCreditsLabel = new JLabel("전공 이수학점:");
@@ -38,7 +34,6 @@ public class GraduationRequirementPanel extends JPanel {
         JLabel genCreditsLabel = new JLabel("교양 이수학점:");
         JTextField genCreditsField = new JTextField(20);
 
-        // Create O/X buttons for public English score
         JPanel englishPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton oButton = new JButton("O");
         JButton xButton = new JButton("X");
@@ -53,7 +48,6 @@ public class GraduationRequirementPanel extends JPanel {
         englishPanel.add(oButton);
         englishPanel.add(xButton);
 
-        // Submit button
         JButton submitBtn = new JButton("제출");
         submitBtn.setFont(new Font("Poppins", Font.BOLD, 14));
         submitBtn.setBackground(Color.WHITE);
@@ -61,7 +55,6 @@ public class GraduationRequirementPanel extends JPanel {
         submitBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         submitBtn.setPreferredSize(new Dimension(300, 60));
 
-        // Style for labels and text fields
         totalCreditsField.setFont(new Font("Poppins", Font.BOLD, 14));
         totalCreditsField.setBackground(Color.WHITE);
         totalCreditsField.setForeground(Color.BLACK);
@@ -78,7 +71,6 @@ public class GraduationRequirementPanel extends JPanel {
         genCreditsField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         genCreditsField.setPreferredSize(new Dimension(200, 30));
 
-        // Layout components
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
@@ -125,7 +117,6 @@ public class GraduationRequirementPanel extends JPanel {
                 int majorCredits = Integer.parseInt(majorCreditsField.getText().trim());
                 int genCredits = Integer.parseInt(genCreditsField.getText().trim());
 
-                // Update the title and submit logic
                 isFirstVisit = false;
                 removeAll();
                 renderResult(app, totalCredits, majorCredits, genCredits);
@@ -134,16 +125,15 @@ public class GraduationRequirementPanel extends JPanel {
             }
         });
 
-        // O/X button action listeners
         oButton.addActionListener(e -> {
             passedEnglish = true;
-            oButton.setBackground(Color.GREEN);  // Highlight "O"
-            xButton.setBackground(null);  // Reset "X"
+            oButton.setBackground(Color.GREEN); 
+            xButton.setBackground(null);
         });
         xButton.addActionListener(e -> {
             passedEnglish = false;
-            xButton.setBackground(Color.RED);  // Highlight "X"
-            oButton.setBackground(null);  // Reset "O"
+            xButton.setBackground(Color.RED);
+            oButton.setBackground(null);
         });
 
         JButton backButton = new JButton("←");
@@ -157,21 +147,18 @@ public class GraduationRequirementPanel extends JPanel {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5); // Add padding between components
+        gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Create labels for the result
         JLabel totalCreditsResult = new JLabel("총 이수학점: " + totalCredits + " / 140");
         JLabel majorCreditsResult = new JLabel("전공 이수학점: " + majorCredits + " / 72");
         JLabel genCreditsResult = new JLabel("교양 이수학점: " + genCredits + " / 30");
         JLabel englishResult = new JLabel("공인영어 성적: " + (passedEnglish ? "✅" : "❌"));
 
-        // Style the result labels
         totalCreditsResult.setFont(new Font("Poppins", Font.BOLD, 14));
         majorCreditsResult.setFont(new Font("Poppins", Font.BOLD, 14));
         genCreditsResult.setFont(new Font("Poppins", Font.BOLD, 14));
         englishResult.setFont(new Font("Poppins", Font.BOLD, 14));
 
-        // Add the result labels to the panel
         gbc.gridx = 0;
         gbc.gridy = 0;
         panel.add(totalCreditsResult, gbc);

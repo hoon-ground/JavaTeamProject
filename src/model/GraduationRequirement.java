@@ -1,10 +1,10 @@
 package model;
 
 public class GraduationRequirement {
-    private int requiredTotalCredits;           // 전체 졸업 이수 학점
-    private int requiredMajorCredits;           // 전공 필수 이수 학점
-    private int requiredGeneralCredits;         // 교양 필수 이수 학점
-    private int requiredEnglishScore;           // 공인 영어 성적 기준 (700점 이상)
+    private int requiredTotalCredits;           //전체 졸업 이수 학점
+    private int requiredMajorCredits;           //전공 필수 이수 학점
+    private int requiredGeneralCredits;         //교양 필수 이수 학점
+    private int requiredEnglishScore;           //공인 영어 성적 기준 (700점 이상)
 
     public GraduationRequirement(int requiredTotalCredits,
                                  int requiredMajorCredits,
@@ -16,7 +16,6 @@ public class GraduationRequirement {
         this.requiredEnglishScore = requiredEnglishScore;
     }
 
-    // Getter & Setter
     public int getRequiredTotalCredits() {
         return requiredTotalCredits;
     }
@@ -59,10 +58,5 @@ public class GraduationRequirement {
             requiredEnglishScore
         );
     }
-    /*
-     * 추후 구현:
-     * - 학과별 기본 졸업요건 정보를 JSON 또는 DB에서 로드하는 정적 메서드 추가
-     * - 예: GraduationRequirement.fromMajor("컴퓨터공학과")
-     */
 
 }

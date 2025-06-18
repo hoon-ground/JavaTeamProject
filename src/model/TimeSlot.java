@@ -55,14 +55,13 @@ public class TimeSlot {
     return String.format("%s %02d:%02d~%02d:%02d", day, startHour, startMinute, endHour, endMinute);
   }
 
-  // ✅ 추가된 정적 파서 메서드
   public static List<TimeSlot> parseTimeString(String timeString) {
       List<TimeSlot> slots = new ArrayList<>();
 
       if (timeString == null || timeString.trim().isEmpty()) return slots;
 
       Map<String, Integer> startTimes = new HashMap<>();
-      startTimes.put("1A", 9 * 60);    // 오전 9:00
+      startTimes.put("1A", 9 * 60);
       startTimes.put("1B", 9 * 60 + 30);
       startTimes.put("2A", 10 * 60);
       startTimes.put("2B", 10 * 60 + 30);

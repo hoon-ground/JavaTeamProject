@@ -1,22 +1,19 @@
-// StudentAppGUI.java
 package gui;
 
 import javax.swing.*;
-
 import org.json.JSONObject;
-
 import model.Timetable;
-
 import java.awt.*;
-//TODO : 일단 기본 UI로 구성을 해놨는데 로직처리 다 해놓고 나중에 디자인처리하면 될 것 같습니다.
 
 public class StudentAppGUI extends JFrame {
     private CardLayout cardLayout;
     private JPanel mainPanel;
     private JSONObject currentUserJson;
     private Timetable currentTimetable;
-    private String currentStudentId = "20241234";       // 로그인 후 실제 값으로 설정
-    private String currentStudentName = "황상균";
+    
+    //초기화. 이후에 값 받아오면 변경.
+    private String currentStudentId = "2020114744";
+    private String currentStudentName = "김지훈";
     private String currentSemester = "2025년 1학기";
     
     public StudentAppGUI() {
@@ -35,11 +32,10 @@ public class StudentAppGUI extends JFrame {
         mainPanel.add(new GraduationRequirementPanel(this), "grad");
 
         add(mainPanel);
-        cardLayout.show(mainPanel, "start");  // 앱 실행 시 StartPanel이 먼저 나오도록 설정
+        cardLayout.show(mainPanel, "start");
         setVisible(true);
     }
 
-    // < -- UI랑 DB 연동 -->    
     public void setCurrentUserJson(JSONObject userJson) {
         this.currentUserJson = userJson;
     }
@@ -55,7 +51,6 @@ public class StudentAppGUI extends JFrame {
     public Timetable getCurrentTimetable() {
         return currentTimetable;
     }
-    // < ------ >
 
     public void showPanel(String name) {
         cardLayout.show(mainPanel, name);

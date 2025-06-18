@@ -3,14 +3,14 @@ package model;
 import java.util.List;
 
 public class Course {
-    private final String subjectCode;   // 교과목번호
-    private final String name;          // 교과목명
-    private final String professor;
-    private final String location;
+    private final String subjectCode;   //교과목번호
+    private final String name;          //교과목명
+    private final String professor;		//교수명
+    private final String location;		//수업장소
+    private final String division;      //구분 (전공, 교양 등)
+    private final int year;             //학년
+    private final int credit;           //학점
     private final List<TimeSlot> timeSlots;
-    private final String division;      // 구분 (전공, 교양 등)
-    private final int year;             // 학년
-    private final int credit;           // 학점
 
     public Course(String subjectCode, String name, String professor, String location,
                   List<TimeSlot> timeSlots, String division, int year, int credit) {

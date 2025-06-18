@@ -1,4 +1,3 @@
-// JsonUtil.java
 package util;
 
 import com.google.gson.Gson;
@@ -73,7 +72,6 @@ public class JsonUtil {
             JSONArray users = root.getJSONArray("users");
             JSONObject targetUser = null;
 
-            // 기존 유저 탐색
             for (int i = 0; i < users.length(); i++) {
                 JSONObject user = users.getJSONObject(i);
                 if (studentId.equals(user.optString("studentId"))) {
@@ -82,7 +80,6 @@ public class JsonUtil {
                 }
             }
 
-            // 유저 없으면 새로 추가
             if (targetUser == null) {
                 targetUser = new JSONObject();
                 targetUser.put("studentId", studentId);
@@ -92,12 +89,10 @@ public class JsonUtil {
                 users.put(targetUser);
             }
 
-            // 학기 반영
             targetUser.put("selectedSemester", semester);
             JSONArray courseArray = new JSONArray(gson.toJson(courses));
             targetUser.getJSONObject("timetables").put(semester, courseArray);
 
-            // 저장
             Files.write(file.toPath(), root.toString(4).getBytes());
             System.out.println("✅ 시간표 저장 완료");
         } catch (Exception e) {

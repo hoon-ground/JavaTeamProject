@@ -8,7 +8,6 @@ public class SemesterPanel extends JPanel {
         setLayout(new BorderLayout());
 
         DefaultListModel<String> model = new DefaultListModel<>();
-        //TODO : 하드코딩. 데이터불러와서 처리.
         model.addElement("2025년 1학기");
         model.addElement("2024년 겨울학기");
         model.addElement("2024년 2학기");
@@ -18,7 +17,6 @@ public class SemesterPanel extends JPanel {
         semesterList.addListSelectionListener(e -> {
             String selected = semesterList.getSelectedValue();
             JOptionPane.showMessageDialog(this, selected + " 시간표로 이동합니다.");
-            // TODO: 해당 학기로 시간표 상태 갱신
         });
         
         JButton backButton = new JButton("←");

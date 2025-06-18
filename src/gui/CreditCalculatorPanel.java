@@ -11,48 +11,41 @@ public class CreditCalculatorPanel extends JPanel {
     private static final double[] GRADE_POINTS = {4.3, 4.0, 3.7, 3.3, 3.0, 2.7, 2.3, 2.0, 1.7, 1.3, 1.0, 0.7, 0.0};
 
     public CreditCalculatorPanel(StudentAppGUI app) {
+    	
         setLayout(new BorderLayout());
-
-        String[] columns = {"과목명", "학점", "성적", "전공(O/X)"};  // 테이블 컬럼
-        DefaultTableModel model = new DefaultTableModel(columns, 50);  // 테이블 모델 생성
+        String[] columns = {"과목명", "학점", "성적", "전공(O/X)"};
+        DefaultTableModel model = new DefaultTableModel(columns, 50);
         JTable table = new JTable(model);
         table.setFont(new Font("Poppins", Font.PLAIN, 14));
         table.setRowHeight(30);
 
-        // 테이블 데이터 초기화
         for (int i = 0; i < 50; i++) {
             model.setValueAt("과목" + (i + 1), i, 0);
-            model.setValueAt(0, i, 1); // 학점은 숫자로 초기화
-            model.setValueAt("A+", i, 2); // 성적은 기본값 A+
-            model.setValueAt("X", i, 3); // 전공 여부는 기본값 X
+            model.setValueAt(0, i, 1);
+            model.setValueAt("A+", i, 2);
+            model.setValueAt("X", i, 3);
         }
 
-        // 학점 입력을 위한 텍스트 필드로 셀 설정 (학점은 Integer)
         table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(new JTextField()));
 
-        // 성적 드롭다운(JComboBox) 추가
         JComboBox<String> gradeComboBox = new JComboBox<>(GRADES);
         gradeComboBox.setFont(new Font("Poppins", Font.BOLD, 14));
         gradeComboBox.setBackground(Color.WHITE);
         gradeComboBox.setForeground(Color.BLACK);
         gradeComboBox.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
-        // 전공 O/X 드롭다운 추가
         JComboBox<String> majorComboBox = new JComboBox<>(new String[]{"O", "X"});
         majorComboBox.setFont(new Font("Poppins", Font.BOLD, 14));
         majorComboBox.setBackground(Color.WHITE);
         majorComboBox.setForeground(Color.BLACK);
         majorComboBox.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
-        // 셀 편집기 설정
         table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(gradeComboBox)); // 성적 콤보박스 편집기
         table.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(majorComboBox)); // 전공 O/X 편집기
 
-        // 테이블을 스크롤 가능하게 추가
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
-        // GPA, 학점 합계 표시
         JPanel infoPanel = new JPanel(new GridLayout(4, 1));
         JLabel gpaSumLabel = new JLabel("평점 합계: 0.00");
         JLabel gpaAvgLabel = new JLabel("평점 평균: 0.00");
@@ -64,13 +57,13 @@ public class CreditCalculatorPanel extends JPanel {
         infoPanel.add(genGpaLabel);
         add(infoPanel, BorderLayout.NORTH);
 
-        // 제출 버튼
         JButton submitBtn = new JButton("제출");
         submitBtn.setFont(new Font("Poppins", Font.BOLD, 14));
         submitBtn.setBackground(Color.WHITE);
         submitBtn.setForeground(Color.BLACK);
         submitBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
+        
         submitBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -81,7 +74,6 @@ public class CreditCalculatorPanel extends JPanel {
                 double totalGenGradePoints = 0;
                 int totalGenCredits = 0;
 
-                // 모든 과목에 대해 계산
                 for (int i = 0; i < 50; i++) {
                     Object gradeObj = model.getValueAt(i, 2);
                     Object creditObj = model.getValueAt(i, 1);
@@ -122,7 +114,6 @@ public class CreditCalculatorPanel extends JPanel {
             }
         });
 
-        // 뒤로가기 버튼 추가
         JButton backBtn = new JButton("<-");
         backBtn.setFont(new Font("Poppins", Font.BOLD, 14));
         backBtn.setBackground(Color.WHITE);
@@ -130,10 +121,9 @@ public class CreditCalculatorPanel extends JPanel {
         backBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
         backBtn.addActionListener(e -> app.showPanel("main"));
-        // 하단에 제출 버튼과 뒤로가기 버튼 추가
         JPanel submitPanel = new JPanel();
         submitPanel.add(submitBtn);
-        submitPanel.add(backBtn);  // 뒤로가기 버튼 추가
+        submitPanel.add(backBtn);
         add(submitPanel, BorderLayout.SOUTH);
     }
 

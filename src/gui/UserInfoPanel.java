@@ -1,4 +1,3 @@
-// UserInfoPanel.java
 package gui;
 
 import javax.swing.*;
@@ -43,7 +42,7 @@ public class UserInfoPanel extends JPanel {
         add(titleLabel, gbc);
 
         JLabel nameLabel = new JLabel("이름:");
-        nameField = new JTextField();  // 이름 입력 받기
+        nameField = new JTextField();
         nameLabel.setFont(new Font("Poppins", Font.BOLD, 14));
         nameField.setFont(new Font("Poppins", Font.PLAIN, 14));
         nameField.setPreferredSize(new Dimension(200, 30));
@@ -57,7 +56,7 @@ public class UserInfoPanel extends JPanel {
         add(nameField, gbc);
 
         JLabel studentIdLabel = new JLabel("학번:");
-        studentIdField = new JTextField();  // 학번 입력 받기
+        studentIdField = new JTextField();
         studentIdLabel.setFont(new Font("Poppins", Font.BOLD, 14));
         studentIdField.setFont(new Font("Poppins", Font.PLAIN, 14));
         studentIdField.setPreferredSize(new Dimension(200, 30));
@@ -76,7 +75,7 @@ public class UserInfoPanel extends JPanel {
         saveButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         saveButton.setPreferredSize(new Dimension(120, 40));
         saveButton.setFocusPainted(false);
-        gbc.gridwidth = 2; // 버튼이 두 칸을 차지하도록 설정
+        gbc.gridwidth = 2;
         gbc.gridx = 0;
         gbc.gridy = 3;
         add(saveButton, gbc);
@@ -107,7 +106,6 @@ public class UserInfoPanel extends JPanel {
         JSONObject root;
         JSONArray users;
 
-        // 파일 읽기 또는 새로 생성
         if (file.exists()) {
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 StringBuilder jsonBuilder = new StringBuilder();
@@ -130,7 +128,6 @@ public class UserInfoPanel extends JPanel {
             users = new JSONArray();
         }
 
-        // 동일 사용자 찾기
         JSONObject currentUser = null;
         for (int i = 0; i < users.length(); i++) {
             JSONObject user = users.getJSONObject(i);
@@ -141,17 +138,15 @@ public class UserInfoPanel extends JPanel {
             }
         }
 
-        // 없으면 새로 생성
         if (currentUser == null) {
             currentUser = new JSONObject();
             currentUser.put("studentId", studentId);
             currentUser.put("name", name);
-            currentUser.put("selectedSemester", "2025년 1학기"); // 기본 학기
+            currentUser.put("selectedSemester", "2025년 1학기");
             currentUser.put("timetables", new JSONObject());
             users.put(currentUser);
         }
 
-        // ✅ 세션에 현재 사용자 저장
         UserSession.setStudentId(studentId);
         UserSession.setName(name);
         UserSession.setSelectedSemester(currentUser.optString("selectedSemester", "2025년 1학기"));
@@ -164,7 +159,6 @@ public class UserInfoPanel extends JPanel {
             e.printStackTrace();
         }
 
-        // 👇 시간표 객체 연동
         parent.setCurrentUserJson(currentUser);
         Timetable timetable = new Timetable();
         timetable.setOwner(new Student(name, List.of(), 0));
