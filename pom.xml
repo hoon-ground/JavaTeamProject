@@ -9,7 +9,6 @@
   <artifactId>KnuTimeTable</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
-  <!-- ✅ 여기에 추가 -->
   <repositories>
     <repository>
       <id>central</id>
