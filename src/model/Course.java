@@ -2,7 +2,7 @@ package model;
 
 import java.util.List;
 
-public class Course extends AbstractCourse {
+public class Course extends AbstractCourse implements Exportable {
     private final String subjectCode;   //교과목번호
     private final String name;          //교과목명
     private final String professor;		//교수명
@@ -27,6 +27,13 @@ public class Course extends AbstractCourse {
     @Override
     public String getCourseType() {
         return division; // 예: "전공", "교양" 반환
+    }
+
+    @Override
+    // 인터페이스 구현
+    public String toExportString() {
+        return subjectCode + "," + name + "," + professor + "," + location + "," +
+               division + "," + year + "," + credit;
     }
 
     public String getSubjectCode() {

@@ -39,6 +39,12 @@ public class Timetable {
 		}
 		return true;
 	}
+
+	public boolean addCourse(String subjectCode, String name, String professor, String location,
+                         List<TimeSlot> timeSlots, String division, int year, int credit) {
+		Course course = new Course(subjectCode, name, professor, location, timeSlots, division, year, credit);
+		return addCourse(course); // 기존 메서드 활용
+	}
 	
 	public void setCourses(List<Course> courses) {
 		this.courses = courses;

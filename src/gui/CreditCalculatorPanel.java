@@ -1,5 +1,7 @@
 package gui;
 
+import model.Exportable;  // 인터페이스
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -14,7 +16,6 @@ import java.util.List;
 
 public class CreditCalculatorPanel extends JPanel {
     private static final String[] GRADES = {"A+", "A0", "A-", "B+", "B0", "B-", "C+", "C0", "C-", "D+", "D0", "D-", "F"};
-    private static final double[] GRADE_POINTS = {4.3, 4.0, 3.7, 3.3, 3.0, 2.7, 2.3, 2.0, 1.7, 1.3, 1.0, 0.7, 0.0};
 
     public CreditCalculatorPanel(StudentAppGUI app) {
     	
@@ -136,11 +137,67 @@ public class CreditCalculatorPanel extends JPanel {
         backBtn.setBackground(Color.WHITE);
         backBtn.setForeground(Color.BLACK);
         backBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-
         backBtn.addActionListener(e -> app.showPanel("main"));
+
+        JButton exportBtn = new JButton("요약 작게 보기");
+        exportBtn.setFont(new Font("Poppins", Font.BOLD, 14));
+        exportBtn.setBackground(Color.WHITE);
+        exportBtn.setForeground(Color.BLACK);
+        exportBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+
+        exportBtn.addActionListener(e -> {
+            List<Exportable> exportList = new ArrayList<>();
+
+            for (int i = 0; i < 50; i++) {
+                Object nameObj = model.getValueAt(i, 0);
+                Object creditObj = model.getValueAt(i, 1);
+                Object majorObj = model.getValueAt(i, 3);
+
+                if (nameObj == null || creditObj == null || majorObj == null) continue;
+
+                String name = nameObj.toString().trim();
+                String creditStr = creditObj.toString().trim();
+                String major = majorObj.toString().trim();
+                int credits;
+
+                try {
+                    credits = Integer.parseInt(creditStr);
+                } catch (NumberFormatException ex) {
+                    credits = 0;
+                }
+
+                String division = major.equalsIgnoreCase("O") ? "전공" : "교양";
+
+                Course course = new Course("TEMP", name, "PROF", "ROOM",
+                        new ArrayList<>(), division, 1, credits);
+
+                exportList.add(course);
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("<< 과목 정보 요약 >>\n\n");
+            for (Exportable course : exportList) {
+                String[] fields = course.toExportString().split(",");
+                sb.append("과목명: ").append(fields[1])
+                .append(" | 학점: ").append(fields[6])
+                .append(" | 구분: ").append(fields[4])
+                .append("\n");
+            }
+
+            JTextArea textArea = new JTextArea(sb.toString());
+            textArea.setEditable(false);
+            textArea.setFont(new Font("Poppins", Font.PLAIN, 14));
+            JScrollPane csvscrollPane = new JScrollPane(textArea);
+            csvscrollPane.setPreferredSize(new Dimension(450, 300));
+
+            JOptionPane.showMessageDialog(null, csvscrollPane, "CSE 과목 정보 요약", JOptionPane.INFORMATION_MESSAGE);
+        });
+
         JPanel submitPanel = new JPanel();
         submitPanel.add(submitBtn);
         submitPanel.add(backBtn);
+        submitPanel.add(exportBtn);
         add(submitPanel, BorderLayout.SOUTH);
     }
 
