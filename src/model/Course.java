@@ -2,7 +2,7 @@ package model;
 
 import java.util.List;
 
-public class Course {
+public class Course extends AbstractCourse {
     private final String subjectCode;   //교과목번호
     private final String name;          //교과목명
     private final String professor;		//교수명
@@ -22,6 +22,11 @@ public class Course {
         this.division = division;
         this.year = year;
         this.credit = credit;
+    }
+
+    @Override
+    public String getCourseType() {
+        return division; // 예: "전공", "교양" 반환
     }
 
     public String getSubjectCode() {

@@ -2,9 +2,15 @@ package gui;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import model.AbstractCourse;
+import model.Course;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreditCalculatorPanel extends JPanel {
     private static final String[] GRADES = {"A+", "A0", "A-", "B+", "B0", "B-", "C+", "C0", "C-", "D+", "D0", "D-", "F"};
@@ -67,6 +73,7 @@ public class CreditCalculatorPanel extends JPanel {
         submitBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                List<AbstractCourse> allCourses = new ArrayList<>();
                 double totalGradePoints = 0;
                 int totalCredits = 0;
                 double totalMajorGradePoints = 0;
@@ -78,10 +85,12 @@ public class CreditCalculatorPanel extends JPanel {
                     Object gradeObj = model.getValueAt(i, 2);
                     Object creditObj = model.getValueAt(i, 1);
                     Object majorObj = model.getValueAt(i, 3);
+                    Object nameObj = model.getValueAt(i, 0);
 
                     String grade = gradeObj != null ? gradeObj.toString().trim() : "";
                     String creditStr = creditObj != null ? creditObj.toString().trim() : "0";
                     String major = majorObj != null ? majorObj.toString().trim() : "X";
+                    String name = nameObj != null ? nameObj.toString().trim() : "과목";
 
                     int credits = 0;
                     try {
@@ -90,11 +99,19 @@ public class CreditCalculatorPanel extends JPanel {
                         credits = 0;
                     }
 
+                    // 전공이면 division = "전공", 아니면 "교양"
+                    String division = major.equalsIgnoreCase("O") ? "전공" : "교양";
+
+                    // AbstractCourse 생성
+                    AbstractCourse course = new Course("TMP", name, "prof", "room",
+                            new ArrayList<>(), division, 1, credits);
+                    allCourses.add(course);
+
                     double gradePoint = getGradePoint(grade);
                     totalGradePoints += credits * gradePoint;
                     totalCredits += credits;
 
-                    if (major.equalsIgnoreCase("O")) {
+                    if (course.getCourseType().equals("전공")) {
                         totalMajorGradePoints += credits * gradePoint;
                         totalMajorCredits += credits;
                     } else {

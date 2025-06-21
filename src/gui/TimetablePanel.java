@@ -28,6 +28,7 @@ public class TimetablePanel extends JPanel {
         this.timetable = new Timetable();
         this.gridPanel = new JPanel(new GridLayout(TIMES.length, DAYS.length));
 
+        //상단 버튼
         JButton addCourseBtn = new JButton("수업 목록에서 검색 및 추가");
         addCourseBtn.addActionListener(e -> showCourseSelectionDialog());
 
@@ -62,17 +63,19 @@ public class TimetablePanel extends JPanel {
                     for (Course course : timetable.getCourses()) {
                         for (TimeSlot slot : course.getTimeSlots()) {
                         	if (slot.getDay().equals(DAYS[c]) && slot.getStartHour() == 9 + (r - 1)) {
+                        	    // 셀 안쪽에 내용 구성
                         	    JLabel label = new JLabel("<html><center>" +
                         	        course.getName() + "<br/>" + course.getProfessor() +
                         	        "</center></html>", SwingConstants.CENTER);
                         	    label.setFont(new Font("맑은 고딕", Font.PLAIN, 11));
                         	    label.setOpaque(false);
 
+                        	    // 셀 덮는 투명 레이어 패널
                         	    JPanel overlay = new JPanel(new BorderLayout());
                         	    overlay.setOpaque(false);
                         	    overlay.add(label, BorderLayout.CENTER);
 
-                        	    Course selectedCourse = course;
+                        	    Course selectedCourse = course; // 람다 접근용
                         	    overlay.addMouseListener(new MouseAdapter() {
                         	        @Override
                         	        public void mouseClicked(MouseEvent e) {
@@ -90,7 +93,7 @@ public class TimetablePanel extends JPanel {
                         	        }
                         	    });
 
-                        	    cell.removeAll();
+                        	    cell.removeAll(); // 혹시 이전 UI가 있을 수도 있으니
                         	    cell.setLayout(new BorderLayout());
                         	    cell.add(overlay, BorderLayout.CENTER);
                         	}
@@ -210,11 +213,14 @@ public class TimetablePanel extends JPanel {
         dialog.add(panel);
         dialog.setVisible(true);
     }
+
     
+    // 시간표 객체 외부 노출
     public Timetable getTimetable() {
         return this.timetable;
     }
 
+    // JSON에서 불러온 객체 반영
     public void setTimetable(Timetable newTimetable) {
         this.timetable.getCourses().clear();
         this.timetable.getCourses().addAll(newTimetable.getCourses());
