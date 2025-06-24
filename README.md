@@ -1,5 +1,6 @@
 # JavateamProject
 <code>#Demo Video</code>
+
 https://www.youtube.com/watch?v=AOxGKzkTcmE
 
 <code>#PROGRAM DESCRIPTION</code>
@@ -8,6 +9,7 @@ https://www.youtube.com/watch?v=AOxGKzkTcmE
 사용자는 이름과 학번을 입력하면 개인 시간표를 만들 수 있으며, 전공/교양 구분과 학점을 바탕으로 GPA 계산, 졸업 충족 여부 확인까지 가능.
 
 <code>#HOW TO COMPILE & RUN</code>
+
 Java JDK 17 이상 설치
 resources/ 폴더 내 과목 엑셀파일: 교양.xlsx, 전공.xlsx
 data/ 폴더 (자동 생성됨): 사용자 시간표 JSON 저장소
