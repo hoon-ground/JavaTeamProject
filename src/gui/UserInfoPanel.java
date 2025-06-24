@@ -11,8 +11,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
 
 import model.Course;
@@ -26,13 +24,13 @@ public class UserInfoPanel extends JPanel {
     private JTextField studentIdField;
     private JButton saveButton;
     private StudentAppGUI parent;
-    
+
     public UserInfoPanel(StudentAppGUI parent) {
         this.parent = parent;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
-        
+
         JLabel titleLabel = new JLabel("정보 입력");
         titleLabel.setFont(new Font("Poppins", Font.BOLD, 20));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -67,7 +65,7 @@ public class UserInfoPanel extends JPanel {
         gbc.gridx = 1;
         gbc.gridy = 2;
         add(studentIdField, gbc);
-        
+
         saveButton = new JButton("로그인");
         saveButton.setFont(new Font("Poppins", Font.BOLD, 14));
         saveButton.setBackground(Color.WHITE);
@@ -86,21 +84,28 @@ public class UserInfoPanel extends JPanel {
                 saveOrLoadUserInfo();
             }
         });
-        
-        nameField.setFont(new Font("Poppins", Font.BOLD, 14));
-        studentIdField.setFont(new Font("Poppins", Font.BOLD, 14));
-        saveButton.setFont(new Font("Poppins", Font.BOLD, 14));
-        saveButton.setBackground(Color.WHITE);
-        saveButton.setForeground(Color.BLACK);
-        saveButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        saveButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-        setBackground(Color.WHITE); 
-        setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); 
-        
+
+        setBackground(Color.WHITE);
+        setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
     }
+
     private void saveOrLoadUserInfo() {
         String name = nameField.getText().trim();
         String studentId = studentIdField.getText().trim();
+        saveOrLoadUserInfo(name, studentId);
+    }
+
+    private void saveOrLoadUserInfo(String name, String studentId) {
+        if (studentId.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "학번을 입력하세요.",
+                    "입력 오류",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            studentIdField.requestFocus();
+            return; // 검증 실패 → 저장 로직 중단
+        }
 
         File file = new File("src/data/timetable.json");
         JSONObject root;
@@ -131,8 +136,7 @@ public class UserInfoPanel extends JPanel {
         JSONObject currentUser = null;
         for (int i = 0; i < users.length(); i++) {
             JSONObject user = users.getJSONObject(i);
-            if (studentId.equals(user.optString("studentId")) &&
-                name.equals(user.optString("name"))) {
+            if (studentId.equals(user.optString("studentId"))) {
                 currentUser = user;
                 break;
             }
@@ -149,22 +153,21 @@ public class UserInfoPanel extends JPanel {
 
         UserSession.setStudentId(studentId);
         UserSession.setName(name);
-        UserSession.setSelectedSemester(currentUser.optString("selectedSemester", "2025년 1학기"));
+        UserSession.setSelectedSemester(
+                currentUser.optString("selectedSemester", "2025년 1학기")
+        );
 
         root.put("users", users);
-
         try (FileWriter fw = new FileWriter(file)) {
             fw.write(root.toString(2));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        parent.setCurrentUserJson(currentUser);
         Timetable timetable = new Timetable();
         timetable.setOwner(new Student(name, List.of(), 0));
         parent.setCurrentTimetable(timetable);
-
+        parent.setCurrentUserJson(currentUser);
         parent.showPanel("main");
     }
-
 }
